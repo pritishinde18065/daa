@@ -1,0 +1,30 @@
+def quick_sort(arr):
+    # Base case: If the array has one or no elements, it's already sorted
+    if len(arr) <= 1:
+        return arr
+
+    # Choose the pivot (we choose the last element here)
+    pivot = arr[-1]
+    left = []   # Elements smaller than the pivot
+    right = []  # Elements greater than the pivot
+    equal = []  # Elements equal to the pivot
+
+    # Partition the array into left, right, and equal parts
+    for num in arr:
+        if num < pivot:
+            left.append(num)
+        elif num > pivot:
+            right.append(num)
+        else:
+            equal.append(num)
+
+    # Recursively sort the left and right parts and concatenate the results
+    return quick_sort(left) + equal + quick_sort(right)
+
+# Take input from the user
+user_input = input("Enter the elements of the array, separated by spaces: ")
+arr = list(map(int, user_input.split()))  # Convert input to a list of integers
+
+print("Original array:", arr)
+sorted_arr = quick_sort(arr)
+print("Sorted array:", sorted_arr)
