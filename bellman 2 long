@@ -1,0 +1,40 @@
+def bellman_ford(vertices, edges, source):
+    # Initialize distances from the source to all vertices as infinite
+    distances = {vertex: float('inf') for vertex in vertices}
+    distances[source] = 0
+
+    # Relax all edges |V| - 1 times
+    for _ in range(len(vertices) - 1):
+        for u, v, weight in edges:
+            if distances[u] != float('inf') and distances[u] + weight < distances[v]:
+                distances[v] = distances[u] + weight
+
+    # Check for negative weight cycles
+    for u, v, weight in edges:
+        if distances[u] != float('inf') and distances[u] + weight < distances[v]:
+            print("Graph contains a negative weight cycle.")
+            return None
+
+    return distances
+
+# Take user input for the graph vertices and edges
+vertices = input("Enter the vertices of the graph, separated by spaces: ").split()
+edges = []
+num_edges = int(input("Enter the number of edges in the graph: "))
+print("Enter each edge in the format 'start_vertex end_vertex weight':")
+for _ in range(num_edges):
+    u, v, w = input().split()
+    edges.append((u, v, int(w)))
+
+# Take input for the source node
+source_node = input("Enter the source node: ")
+
+# Perform the Bellman-Ford algorithm
+if source_node in vertices:
+    shortest_distances = bellman_ford(vertices=vertices, edges=edges, source=source_node)
+    if shortest_distances is not None:
+        print("Shortest distances from source node", source_node, ":")
+        for node, distance in shortest_distances.items():
+            print(f"Node {node}: Distance {distance}")
+else:
+    print("The source node is not present in the graph.")
