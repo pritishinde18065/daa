@@ -1,0 +1,51 @@
+import heapq
+
+def dijkstra(graph, source):
+    # Priority queue to store (distance, node) pairs
+    priority_queue = [(0, source)]
+    # Dictionary to store the shortest distance to each node
+    distances = {node: float('inf') for node in graph}
+    distances[source] = 0
+    # Set to track visited nodes
+    visited = set()
+
+    while priority_queue:
+        # Pop the node with the smallest distance
+        current_distance, current_node = heapq.heappop(priority_queue)
+
+        # Skip if the node is already visited
+        if current_node in visited:
+            continue
+        visited.add(current_node)
+
+        # Update distances for neighboring nodes
+        for neighbor, weight in graph[current_node]:
+            distance = current_distance + weight
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(priority_queue, (distance, neighbor))
+
+    return distances
+
+# Take user input for the graph
+graph = {}
+num_nodes = int(input("Enter the number of nodes in the graph: "))
+for _ in range(num_nodes):
+    node = input("Enter the name of the node: ")
+    neighbors = input(f"Enter the neighbors of {node} in the format 'neighbor1,weight1 neighbor2,weight2 ...': ")
+    graph[node] = []
+    for neighbor in neighbors.split():
+        n, w = neighbor.split(',')
+        graph[node].append((n, int(w)))
+
+# Take input for the source node
+source_node = input("Enter the source node for Dijkstra's algorithm: ")
+
+# Perform Dijkstra's algorithm
+if source_node in graph:
+    shortest_distances = dijkstra(graph, source_node)
+    print("Shortest distances from source node", source_node, ":")
+    for node, distance in shortest_distances.items():
+        print(f"Node {node}: Distance {distance}")
+else:
+    print("The source node is not present in the graph.")
