@@ -1,0 +1,79 @@
+from collections import deque
+
+def bfs(graph, start_node, visited):
+    queue = deque([start_node])
+    traversal = []
+    visited.add(start_node)
+
+    while queue:
+        current_node = queue.popleft()
+        traversal.append(current_node)
+
+        # Add all unvisited neighbors to the queue
+        for neighbor in graph[current_node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+
+    return traversal
+
+def bfs_traversal(graph, is_directed):
+    visited = set()
+    components = []
+
+    # Perform BFS for all nodes to handle disconnected components
+    for node in graph:
+        if node not in visited:
+            component = bfs(graph, node, visited)
+            components.append(component)
+
+    # Flatten the traversal order from all components
+    traversal_order = [node for component in components for node in component]
+
+    return components, traversal_order, len(visited)
+
+# Take user input for the graph
+print("Enter the graph as an adjacency list.")
+print("Example: If node A has neighbors B and C, write: A B C")
+print("Press Enter without typing anything to stop entering nodes.")
+
+graph = {}
+while True:
+    line = input("Enter a node and its neighbors: ").strip()
+    if not line:
+        break
+    parts = line.split()
+    node = parts[0]
+    neighbors = parts[1:]
+    graph[node] = neighbors
+
+# Ask whether the graph is directed or undirected
+is_directed = input("Is the graph directed? (yes/no): ").strip().lower() in ['yes', 'y']
+
+# Convert the graph to an undirected graph if directed is set to false
+if not is_directed:
+    undirected_graph = {}
+    for node, neighbors in graph.items():
+        if node not in undirected_graph:
+            undirected_graph[node] = []
+        for neighbor in neighbors:
+            undirected_graph[node].append(neighbor)
+            if neighbor not in undirected_graph:
+                undirected_graph[neighbor] = []
+            undirected_graph[neighbor].append(node)
+    graph = undirected_graph
+
+# Take input for the starting node
+start_node = input("Enter the starting node for BFS traversal: ").strip()
+
+# Perform BFS traversal
+if start_node in graph:
+    components, traversal_order, total_nodes_visited = bfs_traversal(graph, is_directed)
+    print("\nBFS Traversal Order:")
+    print(" -> ".join(traversal_order))
+    print("\nTotal Number of Nodes Visited:", total_nodes_visited)
+    print("\nTraversal for Each Connected Component:")
+    for idx, component in enumerate(components, 1):
+        print(f"Component {idx}: {' -> '.join(component)}")
+else:
+    print("The starting node is not present in the graph.")
