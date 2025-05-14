@@ -1,0 +1,371 @@
+class Array:
+    def __init__(self):
+        self.array = []
+
+    def insert(self, index, value):
+        self.array.insert(index, value)
+        return 0, 1  # No comparisons, one shift for insertion
+
+    def search(self, value):
+        comparisons = 0
+        for i in self.array:
+            comparisons += 1
+            if i == value:
+                return True, comparisons
+        return False, comparisons
+
+    def delete(self, index):
+        if 0 <= index < len(self.array):
+            self.array.pop(index)
+            return 0, len(self.array) - index  # No comparisons, shifts for deletion
+        return 0, 0
+
+    def update(self, index, value):
+        if 0 <= index < len(self.array):
+            self.array[index] = value
+            return 0, 0  # No comparisons or shifts for update
+        return 0, 0
+
+    def reverse(self):
+        self.array.reverse()
+        return 0, len(self.array) // 2  # No comparisons, shifts for reversing
+
+    def display(self):
+        return self.array
+
+
+class SinglyLinkedList:
+    class Node:
+        def __init__(self, value):
+            self.value = value
+            self.next = None
+
+    def __init__(self):
+        self.head = None
+
+    def insert(self, index, value):
+        new_node = self.Node(value)
+        if index == 0:
+            new_node.next = self.head
+            self.head = new_node
+            return 0, 1
+
+        current = self.head
+        position = 0
+        comparisons = 0
+        while current and position < index - 1:
+            comparisons += 1
+            current = current.next
+            position += 1
+
+        if current:
+            new_node.next = current.next
+            current.next = new_node
+            return comparisons, 1
+        return comparisons, 0
+
+    def search(self, value):
+        current = self.head
+        comparisons = 0
+        while current:
+            comparisons += 1
+            if current.value == value:
+                return True, comparisons
+            current = current.next
+        return False, comparisons
+
+    def delete(self, index):
+        if index == 0 and self.head:
+            self.head = self.head.next
+            return 0, 1
+
+        current = self.head
+        position = 0
+        comparisons = 0
+        while current and position < index - 1:
+            comparisons += 1
+            current = current.next
+            position += 1
+
+        if current and current.next:
+            current.next = current.next.next
+            return comparisons, 1
+        return comparisons, 0
+
+    def update(self, index, value):
+        current = self.head
+        position = 0
+        comparisons = 0
+        while current and position < index:
+            comparisons += 1
+            current = current.next
+            position += 1
+
+        if current:
+            current.value = value
+            return comparisons, 0
+        return comparisons, 0
+
+    def reverse(self):
+        prev = None
+        current = self.head
+        shifts = 0
+        while current:
+            shifts += 1
+            next_node = current.next
+            current.next = prev
+            prev = current
+            current = next_node
+        self.head = prev
+        return 0, shifts
+
+    def display(self):
+        result = []
+        current = self.head
+        while current:
+            result.append(current.value)
+            current = current.next
+        return result
+
+
+class DoublyLinkedList:
+    class Node:
+        def __init__(self, value):
+            self.value = value
+            self.next = None
+            self.prev = None
+
+    def __init__(self):
+        self.head = None
+
+    def insert(self, index, value):
+        new_node = self.Node(value)
+        if index == 0:
+            new_node.next = self.head
+            if self.head:
+                self.head.prev = new_node
+            self.head = new_node
+            return 0, 1
+
+        current = self.head
+        position = 0
+        comparisons = 0
+        while current and position < index - 1:
+            comparisons += 1
+            current = current.next
+            position += 1
+
+        if current:
+            new_node.next = current.next
+            new_node.prev = current
+            if current.next:
+                current.next.prev = new_node
+            current.next = new_node
+            return comparisons, 1
+        return comparisons, 0
+
+    def search(self, value):
+        current = self.head
+        comparisons = 0
+        while current:
+            comparisons += 1
+            if current.value == value:
+                return True, comparisons
+            current = current.next
+        return False, comparisons
+
+    def delete(self, index):
+        if index == 0 and self.head:
+            self.head = self.head.next
+            if self.head:
+                self.head.prev = None
+            return 0, 1
+
+        current = self.head
+        position = 0
+        comparisons = 0
+        while current and position < index:
+            comparisons += 1
+            current = current.next
+            position += 1
+
+        if current:
+            if current.prev:
+                current.prev.next = current.next
+            if current.next:
+                current.next.prev = current.prev
+            return comparisons, 1
+        return comparisons, 0
+
+    def update(self, index, value):
+        current = self.head
+        position = 0
+        comparisons = 0
+        while current and position < index:
+            comparisons += 1
+            current = current.next
+            position += 1
+
+        if current:
+            current.value = value
+            return comparisons, 0
+        return comparisons, 0
+
+    def reverse(self):
+        current = self.head
+        shifts = 0
+        prev = None
+        while current:
+            shifts += 1
+            next_node = current.next
+            current.next = prev
+            current.prev = next_node
+            prev = current
+            current = next_node
+        self.head = prev
+        return 0, shifts
+
+    def display(self):
+        result = []
+        current = self.head
+        while current:
+            result.append(current.value)
+            current = current.next
+        return result
+
+
+class Stack:
+    def __init__(self):
+        self.stack = []
+
+    def push(self, value):
+        self.stack.append(value)
+        return 0, 1
+
+    def pop(self):
+        if self.stack:
+            self.stack.pop()
+            return 0, 1
+        return 0, 0
+
+    def search(self, value):
+        comparisons = 0
+        for i in self.stack:
+            comparisons += 1
+            if i == value:
+                return True, comparisons
+        return False, comparisons
+
+    def update(self, index, value):
+        if 0 <= index < len(self.stack):
+            self.stack[index] = value
+            return 0, 0
+        return 0, 0
+
+    def reverse(self):
+        self.stack.reverse()
+        return 0, len(self.stack) // 2
+
+    def display(self):
+        return self.stack
+
+
+class Queue:
+    def __init__(self):
+        self.queue = []
+
+    def enqueue(self, value):
+        self.queue.append(value)
+        return 0, 1
+
+    def dequeue(self):
+        if self.queue:
+            self.queue.pop(0)
+            return 0, len(self.queue)
+        return 0, 0
+
+    def search(self, value):
+        comparisons = 0
+        for i in self.queue:
+            comparisons += 1
+            if i == value:
+                return True, comparisons
+        return False, comparisons
+
+    def update(self, index, value):
+        if 0 <= index < len(self.queue):
+            self.queue[index] = value
+            return 0, 0
+        return 0, 0
+
+    def reverse(self):
+        self.queue.reverse()
+        return 0, len(self.queue) // 2
+
+    def display(self):
+        return self.queue
+
+
+# Main Program
+def main():
+    data_structures = {
+        "array": Array(),
+        "singly linked list": SinglyLinkedList(),
+        "doubly linked list": DoublyLinkedList(),
+        "stack": Stack(),
+        "queue": Queue()
+    }
+
+    print("Available Data Structures: Array, Singly Linked List, Doubly Linked List, Stack, Queue")
+    while True:
+        print("\nChoose a data structure or type 'exit' to quit:")
+        choice = input("Enter your choice: ").strip().lower()
+        if choice == "exit":
+            break
+
+        if choice not in data_structures:
+            print("Invalid choice. Please try again.")
+            continue
+
+        ds = data_structures[choice]
+        while True:
+            print("\nAvailable Operations: Create, Insert, Search, Delete, Update, Reverse, Display, Back")
+            operation = input("Enter operation: ").strip().lower()
+
+            if operation == "back":
+                break
+
+            if operation == "create":
+                if choice in ["array", "stack", "queue"]:
+                    ds.__init__()
+                else:
+                    ds = data_structures[choice] = type(ds)()
+                print(f"{choice.capitalize()} initialized.")
+            elif operation == "insert":
+                index = int(input("Enter index (or position): "))
+                value = int(input("Enter value: "))
+                comparisons, shifts = ds.insert(index, value)
+                print(f"Inserted {value} at index {index}. Comparisons: {comparisons}, Shifts: {shifts}")
+            elif operation == "search":
+                value = int(input("Enter value to search: "))
+                found, comparisons = ds.search(value)
+                print(f"Value {'found' if found else 'not found'}. Comparisons: {comparisons}")
+            elif operation == "delete":
+                index = int(input("Enter index (or position): "))
+                comparisons, shifts = ds.delete(index)
+                print(f"Deleted element at index {index}. Comparisons: {comparisons}, Shifts: {shifts}")
+            elif operation == "update":
+                index = int(input("Enter index (or position): "))
+                value = int(input("Enter new value: "))
+                comparisons, shifts = ds.update(index, value)
+                print(f"Updated index {index} to {value}. Comparisons: {comparisons}, Shifts: {shifts}")
+            elif operation == "reverse":
+                comparisons, shifts = ds.reverse()
+                print(f"Reversed the {choice}. Comparisons: {comparisons}, Shifts: {shifts}")
+            elif operation == "display":
+                print(f"Contents of {choice.capitalize()}: {ds.display()}")
+            else:
+                print("Invalid operation. Please try again.")
+
+if __name__ == "__main__":
+    main()
