@@ -1,0 +1,58 @@
+def insertion_sort_recursive(arr, n):
+    # Base case: If the array has one or no elements, it's already sorted
+    if n <= 1:
+        return
+    
+    # Sort the first n-1 elements
+    insertion_sort_recursive(arr, n - 1)
+    
+    # Insert the nth element into its correct position in the sorted part
+    last = arr[n - 1]
+    j = n - 2
+    
+    # Move elements of arr[0..n-2], that are greater than the last element, one position ahead
+    while j >= 0 and arr[j] > last:
+        arr[j + 1] = arr[j]
+        j -= 1
+    
+    arr[j + 1] = last
+
+# Take input from the user
+user_input = input("Enter the elements of the array, separated by spaces: ")
+arr = list(map(int, user_input.split()))  # Convert input to a list of integers
+
+print("Original array:", arr)
+insertion_sort_recursive(arr, len(arr))
+print("Sorted array:", arr)
+
+
+
+
+
+
+
+
+
+def insertion_sort_iterative(arr):
+    # Traverse through the array starting from the second element
+    for i in range(1, len(arr)):
+        key = arr[i]  # Element to be inserted in the sorted portion
+        j = i - 1
+
+        # Move elements of the sorted portion that are greater than the key
+        # one position ahead to make space for the key
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+
+        # Place the key in its correct position
+        arr[j + 1] = key
+
+# Take input from the user
+user_input = input("Enter the elements of the array, separated by spaces: ")
+arr = list(map(int, user_input.split()))  # Convert input to a list of integers
+
+print("Original array:", arr)
+insertion_sort_iterative(arr)
+print("Sorted array:", arr)
+
