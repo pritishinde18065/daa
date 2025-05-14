@@ -1,0 +1,89 @@
+import random
+import time
+
+# Iterative Insertion Sort
+def iterative_insertion_sort(arr):
+    comparisons, swaps = 0, 0
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        while j >= 0 and arr[j] > key:
+            comparisons += 1
+            arr[j + 1] = arr[j]
+            j -= 1
+            swaps += 1
+        if j >= 0:  # Final comparison when the loop condition fails
+            comparisons += 1
+        arr[j + 1] = key
+    return comparisons, swaps
+
+# Recursive Insertion Sort
+def recursive_insertion_sort(arr, n, stats):
+    if n <= 1:
+        return stats
+
+    # Sort the first n-1 elements recursively
+    stats = recursive_insertion_sort(arr, n - 1, stats)
+
+    # Insert the nth element into the sorted array
+    key = arr[n - 1]
+    j = n - 2
+    while j >= 0 and arr[j] > key:
+        stats["comparisons"] += 1
+        arr[j + 1] = arr[j]
+        j -= 1
+        stats["swaps"] += 1
+    if j >= 0:  # Final comparison when the loop condition fails
+        stats["comparisons"] += 1
+    arr[j + 1] = key
+    return stats
+
+# Test cases
+test_cases = {
+    "Already Sorted": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25],
+    "Reverse Sorted": [25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+    "Random Order": [16, 1, 4, 2, 12, 9, 10, 3, 5, 24, 14, 20, 6, 23, 7, 25, 19, 18, 8, 22, 11, 17, 13, 15, 21],
+    "Nearly Sorted": [24, 25, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 1, 2],
+    "Single Element at the End": [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 1],
+    "Large Input": random.sample(range(1, 10001), 10000),  # 10,000 random elements
+}
+
+# Perform the tests
+results = []
+
+for name, arr in test_cases.items():
+    # Iterative Insertion Sort
+    arr_iterative = arr.copy()
+    start_time = time.time()
+    comparisons, swaps = iterative_insertion_sort(arr_iterative)
+    time_taken_iterative = time.time() - start_time
+
+    # Recursive Insertion Sort
+    arr_recursive = arr.copy()
+    start_time = time.time()
+    stats = {"comparisons": 0, "swaps": 0}
+    stats = recursive_insertion_sort(arr_recursive, len(arr_recursive), stats)
+    time_taken_recursive = time.time() - start_time
+
+    # Append results
+    results.append({
+        "Test Case": name,
+        "Iterative Time (s)": time_taken_iterative,
+        "Iterative Comparisons": comparisons,
+        "Iterative Swaps": swaps,
+        "Recursive Time (s)": time_taken_recursive,
+        "Recursive Comparisons": stats["comparisons"],
+        "Recursive Swaps": stats["swaps"],
+    })
+
+# Print results in a tabular format
+print("{:<25} {:>20} {:>20} {:>15} {:>20} {:>20} {:>15}".format(
+    "Test Case", "Iterative Time (s)", "Iterative Comparisons", "Iterative Swaps",
+    "Recursive Time (s)", "Recursive Comparisons", "Recursive Swaps"
+))
+print("-" * 140)
+for result in results:
+    print("{:<25} {:>20.6f} {:>20} {:>15} {:>20.6f} {:>20} {:>15}".format(
+        result["Test Case"], result["Iterative Time (s)"], result["Iterative Comparisons"], result["Iterative Swaps"],
+        result["Recursive Time (s)"], result["Recursive Comparisons"], result["Recursive Swaps"]
+    ))
