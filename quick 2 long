@@ -1,0 +1,52 @@
+def quick_sort(arr, low, high, stats):
+    if low < high:
+        # Partition the array and get the pivot index
+        pivot_index = partition(arr, low, high, stats)
+
+        # Recursively sort the elements before and after the partition
+        quick_sort(arr, low, pivot_index - 1, stats)
+        quick_sort(arr, pivot_index + 1, high, stats)
+
+
+def partition(arr, low, high, stats):
+    # Median-of-three pivot selection
+    mid = (low + high) // 2
+    pivot_candidates = [(arr[low], low), (arr[mid], mid), (arr[high], high)]
+    pivot_candidates.sort(key=lambda x: x[0])
+    pivot_value, pivot_index = pivot_candidates[1]
+
+    # Move the pivot to the end
+    arr[pivot_index], arr[high] = arr[high], arr[pivot_index]
+    stats["swaps"] += 1
+
+    pivot = arr[high]
+    i = low - 1
+
+    for j in range(low, high):
+        stats["comparisons"] += 1
+        if arr[j] <= pivot:
+            i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+            stats["swaps"] += 1
+
+    # Place the pivot in its correct position
+    arr[i + 1], arr[high] = arr[high], arr[i + 1]
+    stats["swaps"] += 1
+
+    return i + 1
+
+
+# Driver code
+if __name__ == "__main__":
+    # Take input from the user
+    user_input = input("Enter the elements of the array, separated by spaces: ")
+    arr = list(map(int, user_input.split()))
+    
+    print("\nOriginal array:", arr)
+    
+    stats = {"comparisons": 0, "swaps": 0}
+    quick_sort(arr, 0, len(arr) - 1, stats)
+    
+    print("\nSorted array:", arr)
+    print(f"Total number of comparisons: {stats['comparisons']}")
+    print(f"Total number of swaps: {stats['swaps']}")
