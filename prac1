@@ -1,0 +1,415 @@
+class OperationCounter:
+    def __init__(self):
+        self.comparisons = 0
+        self.shifts = 0
+
+    def reset(self):
+        self.comparisons = 0
+        self.shifts = 0
+
+    def display(self):
+        print(f"Comparisons: {self.comparisons}, Shifts: {self.shifts}")
+
+
+# Array Implementation
+class Array:
+    def __init__(self):
+        self.data = []
+        self.counter = OperationCounter()
+
+    def create(self):
+        self.data = []
+        self.counter.reset()
+
+    def insert(self, index, value):
+        self.counter.shifts += len(self.data) - index
+        self.data.insert(index, value)
+
+    def search(self, value):
+        for i, item in enumerate(self.data):
+            self.counter.comparisons += 1
+            if item == value:
+                return i
+        return -1
+
+    def delete(self, index):
+        self.counter.shifts += len(self.data) - index - 1
+        self.data.pop(index)
+
+    def update(self, index, value):
+        self.counter.comparisons += 1
+        self.data[index] = value
+
+    def reverse(self):
+        self.counter.shifts += len(self.data) // 2
+        self.data.reverse()
+
+    def display(self):
+        print("Array:", self.data)
+        self.counter.display()
+
+
+# Singly Linked List Node
+class SinglyLinkedListNode:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+
+# Singly Linked List Implementation
+class SinglyLinkedList:
+    def __init__(self):
+        self.head = None
+        self.counter = OperationCounter()
+
+    def create(self):
+        self.head = None
+        self.counter.reset()
+
+    def insert(self, index, value):
+        new_node = SinglyLinkedListNode(value)
+        if index == 0:
+            new_node.next = self.head
+            self.head = new_node
+        else:
+            current = self.head
+            for _ in range(index - 1):
+                self.counter.comparisons += 1
+                if current is None:
+                    return
+                current = current.next
+            new_node.next = current.next if current else None
+            if current:
+                current.next = new_node
+
+    def search(self, value):
+        current = self.head
+        index = 0
+        while current:
+            self.counter.comparisons += 1
+            if current.value == value:
+                return index
+            current = current.next
+            index += 1
+        return -1
+
+    def delete(self, index):
+        if index == 0:
+            self.head = self.head.next if self.head else None
+        else:
+            current = self.head
+            for _ in range(index - 1):
+                self.counter.comparisons += 1
+                if current is None:
+                    return
+                current = current.next
+            if current and current.next:
+                current.next = current.next.next
+
+    def update(self, index, value):
+        current = self.head
+        for _ in range(index):
+            self.counter.comparisons += 1
+            if current is None:
+                return
+            current = current.next
+        if current:
+            current.value = value
+
+    def reverse(self):
+        prev, current = None, self.head
+        while current:
+            self.counter.shifts += 1
+            next_node = current.next
+            current.next = prev
+            prev = current
+            current = next_node
+        self.head = prev
+
+    def display(self):
+        current = self.head
+        print("Singly Linked List:", end=" ")
+        while current:
+            print(current.value, end=" -> ")
+            current = current.next
+        print("None")
+        self.counter.display()
+
+
+# Doubly Linked List Node
+class DoublyLinkedListNode:
+    def __init__(self, value):
+        self.value = value
+        self.prev = None
+        self.next = None
+
+
+# Doubly Linked List Implementation
+class DoublyLinkedList:
+    def __init__(self):
+        self.head = None
+        self.counter = OperationCounter()
+
+    def create(self):
+        self.head = None
+        self.counter.reset()
+
+    def insert(self, index, value):
+        new_node = DoublyLinkedListNode(value)
+        if index == 0:
+            new_node.next = self.head
+            if self.head:
+                self.head.prev = new_node
+            self.head = new_node
+        else:
+            current = self.head
+            for _ in range(index - 1):
+                self.counter.comparisons += 1
+                if current is None:
+                    return
+                current = current.next
+            new_node.next = current.next
+            new_node.prev = current
+            if current and current.next:
+                current.next.prev = new_node
+            if current:
+                current.next = new_node
+
+    def search(self, value):
+        current = self.head
+        index = 0
+        while current:
+            self.counter.comparisons += 1
+            if current.value == value:
+                return index
+            current = current.next
+            index += 1
+        return -1
+
+    def delete(self, index):
+        current = self.head
+        if index == 0 and self.head:
+            self.head = self.head.next
+            if self.head:
+                self.head.prev = None
+            return
+        for _ in range(index):
+            self.counter.comparisons += 1
+            if current is None:
+                return
+            current = current.next
+        if current:
+            if current.prev:
+                current.prev.next = current.next
+            if current.next:
+                current.next.prev = current.prev
+
+    def update(self, index, value):
+        current = self.head
+        for _ in range(index):
+            self.counter.comparisons += 1
+            if current is None:
+                return
+            current = current.next
+        if current:
+            current.value = value
+
+    def reverse(self):
+        current = self.head
+        prev = None
+        while current:
+            self.counter.shifts += 1
+            prev = current.prev
+            current.prev = current.next
+            current.next = prev
+            current = current.prev
+        if prev:
+            self.head = prev.prev
+
+    def display(self):
+        current = self.head
+        print("Doubly Linked List:", end=" ")
+        while current:
+            print(current.value, end=" <-> ")
+            current = current.next
+        print("None")
+        self.counter.display()
+
+
+# Stack Implementation
+class Stack:
+    def __init__(self):
+        self.data = []
+        self.counter = OperationCounter()
+
+    def create(self):
+        self.data = []
+        self.counter.reset()
+
+    def push(self, value):
+        self.data.append(value)
+
+    def pop(self):
+        if self.data:
+            return self.data.pop()
+
+    def search(self, value):
+        for i, item in enumerate(self.data):
+            self.counter.comparisons += 1
+            if item == value:
+                return i
+        return -1
+
+    def display(self):
+        print("Stack:", self.data)
+        self.counter.display()
+
+
+# Queue Implementation
+class Queue:
+    def __init__(self):
+        self.data = []
+        self.counter = OperationCounter()
+
+    def create(self):
+        self.data = []
+        self.counter.reset()
+
+    def enqueue(self, value):
+        self.data.append(value)
+
+    def dequeue(self):
+        if self.data:
+            return self.data.pop(0)
+
+    def search(self, value):
+        for i, item in enumerate(self.data):
+            self.counter.comparisons += 1
+            if item == value:
+                return i
+        return -1
+
+    def display(self):
+        print("Queue:", self.data)
+        self.counter.display()
+
+
+def menu():
+    print("Choose Data Structure:")
+    print("1. Array")
+    print("2. Singly Linked List")
+    print("3. Doubly Linked List")
+    print("4. Stack")
+    print("5. Queue")
+    print("0. Exit")
+    return int(input("Enter choice: "))
+
+
+def main():
+    structures = {
+        1: Array(),
+        2: SinglyLinkedList(),
+        3: DoublyLinkedList(),
+        4: Stack(),
+        5: Queue()
+    }
+
+    while True:
+        choice = menu()
+        if choice == 0:
+            break
+        if choice in structures:
+            structure = structures[choice]
+            print("1. Create\n2. Insert\n3. Search\n4. Delete\n5. Update\n6. Reverse\n0. Back")
+            operation = int(input("Enter operation: "))
+            if operation == 1:
+                structure.create()
+            elif operation == 2:
+                if choice in [4, 5]:  # Stack or Queue
+                    value = input("Enter value: ")
+                    if choice == 4:
+                        structure.push(value)
+                    else:
+                        structure.enqueue(value)
+                else:
+                    index = int(input("Enter index: "))
+                    value = input("Enter value: ")
+                    structure.insert(index, value)
+            elif operation == 3:
+                value = input("Enter value to search: ")
+                print("Found at index:", structure.search(value))
+            elif operation == 4:
+                if choice in [4, 5]:  # Stack or Queue
+                    if choice == 4:
+                        print("Popped:", structure.pop())
+                    else:
+                        print("Dequeued:", structure.dequeue())
+                else:
+                    index = int(input("Enter index to delete: "))
+                    structure.delete(index)
+            elif operation == 5:
+                index = int(input("Enter index: "))
+                value = input("Enter new value: ")
+                structure.update(index, value)
+            elif operation == 6:
+                structure.reverse()
+            structure.display()
+
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def recursive_selection_sort(arr, n=None, index=0):
+    """
+    Recursive implementation of the Selection Sort algorithm.
+
+    :param arr: List of elements to be sorted
+    :param n: Length of the array (used for recursion)
+    :param index: Current index to process
+    :return: None (in-place sorting)
+    """
+    if n is None:
+        n = len(arr)
+
+    # Base case: If the whole array is sorted
+    if index == n:
+        return
+
+    # Find the minimum element in the remaining unsorted array
+    min_index = index
+    for j in range(index + 1, n):
+        if arr[j] < arr[min_index]:
+            min_index = j
+
+    # Swap the found minimum element with the current element
+    arr[index], arr[min_index] = arr[min_index], arr[index]
+
+    # Recursively call the function for the next index
+    recursive_selection_sort(arr, n, index + 1)
+
+
+# Example usage
+if __name__ == "__main__":
+    # Take input from the user
+    array = list(map(int, input("Enter elements of the array separated by spaces: ").split()))
+    print("Original array:", array)
+    recursive_selection_sort(array)
+    print("Sorted array:", array)
