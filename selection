@@ -15,18 +15,31 @@ def selection_sort_recursive(arr, start=0):
     # Recursively sort the remaining unsorted part
     selection_sort_recursive(arr, start + 1)
 
-# Take input from the user
-user_input = input("Enter the elements of the array, separated by spaces: ")
-arr = list(map(int, user_input.split()))  # Convert input to a list of integers
+# Examples to showcase the sorting function
 
-print("Original array:", arr)
-selection_sort_recursive(arr)
-print("Sorted array:", arr)
+# 1. Already sorted array
+sorted_arr = [1, 2, 3, 4, 5]
+print("Original (sorted):", sorted_arr)
+selection_sort_recursive(sorted_arr)
+print("Sorted:", sorted_arr)
 
+# 2. Unsorted array
+unsorted_arr = [3, 1, 4, 5, 2]
+print("\nOriginal (unsorted):", unsorted_arr)
+selection_sort_recursive(unsorted_arr)
+print("Sorted:", unsorted_arr)
 
+# 3. Reverse sorted array
+reverse_arr = [5, 4, 3, 2, 1]
+print("\nOriginal (reverse):", reverse_arr)
+selection_sort_recursive(reverse_arr)
+print("Sorted:", reverse_arr)
 
-
-
+# 4. Array with negative numbers
+negative_arr = [-3, -1, -4, -5, -2]
+print("\nOriginal (negative):", negative_arr)
+selection_sort_recursive(negative_arr)
+print("Sorted:", negative_arr)
 
 
 
@@ -43,10 +56,28 @@ def selection_sort_iterative(arr):
         # Swap the found minimum element with the element at index i
         arr[i], arr[min_index] = arr[min_index], arr[i]
 
-# Take input from the user
-user_input = input("Enter the elements of the array, separated by spaces: ")
-arr = list(map(int, user_input.split()))  # Convert input to a list of integers
+# Examples to showcase the sorting function
 
-print("Original array:", arr)
-selection_sort_iterative(arr)
-print("Sorted array:", arr)
+# 1. Already sorted array
+sorted_arr = [1, 2, 3, 4, 5]
+print("Original (sorted):", sorted_arr)
+selection_sort_iterative(sorted_arr)
+print("Sorted:", sorted_arr)
+
+# 2. Unsorted array
+unsorted_arr = [3, 1, 4, 5, 2]
+print("\nOriginal (unsorted):", unsorted_arr)
+selection_sort_iterative(unsorted_arr)
+print("Sorted:", unsorted_arr)
+
+# 3. Reverse sorted array
+reverse_arr = [5, 4, 3, 2, 1]
+print("\nOriginal (reverse):", reverse_arr)
+selection_sort_iterative(reverse_arr)
+print("Sorted:", reverse_arr)
+
+# 4. Array with negative numbers
+negative_arr = [-3, -1, -4, -5, -2]
+print("\nOriginal (negative):", negative_arr)
+selection_sort_iterative(negative_arr)
+print("Sorted:", negative_arr)
