@@ -40,10 +40,24 @@ def merge(left, right):
 
     return merged
 
-# Take input from the user
-user_input = input("Enter the elements of the array, separated by spaces: ")
-arr = list(map(int, user_input.split()))  # Convert input to a list of integers
+# Examples to showcase the sorting function
 
-print("Original array:", arr)
-sorted_arr = merge_sort(arr)
-print("Sorted array:", sorted_arr)
+# 1. Already sorted array
+sorted_arr = [1, 2, 3, 4, 5]
+print("Original (sorted):", sorted_arr)
+print("Sorted:", merge_sort(sorted_arr))
+
+# 2. Unsorted array
+unsorted_arr = [3, 1, 4, 5, 2]
+print("\nOriginal (unsorted):", unsorted_arr)
+print("Sorted:", merge_sort(unsorted_arr))
+
+# 3. Reverse sorted array
+reverse_arr = [5, 4, 3, 2, 1]
+print("\nOriginal (reverse):", reverse_arr)
+print("Sorted:", merge_sort(reverse_arr))
+
+# 4. Array with negative numbers
+negative_arr = [-3, -1, -4, -5, -2]
+print("\nOriginal (negative):", negative_arr)
+print("Sorted:", merge_sort(negative_arr))
